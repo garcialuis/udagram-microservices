@@ -6,6 +6,7 @@ import { FeedItem } from '../feed/models/feed-item.model';
 import { catchError, tap, map } from 'rxjs/operators';
 
 const API_HOST = environment.apiHost;
+const FEED_API_HOST = environment.feedApiHost;
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,15 @@ export class ApiService {
   }
 
   get(endpoint): Promise<any> {
-    const url = `${API_HOST}${endpoint}`;
+    var url = endpoint;
+    
+    if (url.substring(1, 5) === "user"){
+      url = API_HOST;
+    }else if(url.substring(1, 5) == "feed"){
+      url = FEED_API_HOST;
+    }
+
+    url = `${url}${endpoint}`;
     const req = this.http.get(url, this.httpOptions).pipe(map(this.extractData));
 
     return req
@@ -42,7 +51,16 @@ export class ApiService {
   }
 
   post(endpoint, data): Promise<any> {
-    const url = `${API_HOST}${endpoint}`;
+    var url = endpoint;
+    
+    if (url.substring(1, 5) === "user"){
+      url = API_HOST;
+    }else if(url.substring(1, 5) == "feed"){
+      url = FEED_API_HOST;
+    }
+
+    url = `${url}${endpoint}`;
+    // const url = `${API_HOST}${endpoint}`;
     return this.http.post<HttpEvent<any>>(url, data, this.httpOptions)
             .toPromise()
             .catch((e) => {
