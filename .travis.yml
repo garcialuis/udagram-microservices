@@ -6,6 +6,9 @@ node_js:
 services:
     - docker
 
+env:
+    - DOCKER_COMPOSE_VERSION=1.23.2
+
 install:
     - echo "nothing needs to be installed"
 
@@ -13,7 +16,7 @@ before_script:
     - echo "no tests"
 
 script:
-    - docker --version
+    - docker -v && docker-compose -v
 
 after_success:
     - echo "SUCCESS"
